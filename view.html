@@ -12,6 +12,9 @@
 
 <title>Loading… — Python100</title>
 
+
+<!-- Fonts -->
+
 <link
   rel="preconnect"
   href="https://fonts.googleapis.com"
@@ -29,7 +32,7 @@
 >
 
 
-<!-- Highlight.js -->
+<!-- Syntax highlighting -->
 
 <link
   rel="stylesheet"
@@ -39,10 +42,16 @@
 
 <style>
 
+/* ==================================================
+   VARIABLES
+================================================== */
+
 :root {
 
   --bg: #14171C;
   --panel: #1B1F26;
+  --terminal: #0F1115;
+
   --line: #262B33;
 
   --text: #E8E6E1;
@@ -58,6 +67,10 @@
 
 }
 
+
+/* ==================================================
+   GENERAL
+================================================== */
 
 * {
   box-sizing: border-box;
@@ -104,9 +117,9 @@ a {
 }
 
 
-/* -----------------------------------------------
-   Navigation
------------------------------------------------- */
+/* ==================================================
+   NAV
+================================================== */
 
 .nav {
 
@@ -157,19 +170,25 @@ a {
 }
 
 
-/* -----------------------------------------------
-   Header
------------------------------------------------- */
+/* ==================================================
+   HEADER
+================================================== */
 
 header.hero {
 
   margin-bottom:
-    2.2rem;
+    2rem;
 
 }
 
 
 .day-label {
+
+  display:
+    block;
+
+  margin-bottom:
+    0.5rem;
 
   font-family:
     'JetBrains Mono',
@@ -181,16 +200,13 @@ header.hero {
   color:
     var(--accent);
 
-  display:
-    block;
-
-  margin-bottom:
-    0.5rem;
-
 }
 
 
 h1 {
+
+  margin:
+    0;
 
   font-size:
     clamp(1.7rem, 4vw, 2.2rem);
@@ -198,20 +214,20 @@ h1 {
   font-weight:
     500;
 
-  margin:
-    0;
-
   letter-spacing:
     -0.01em;
 
 }
 
 
-/* -----------------------------------------------
-   Section labels
------------------------------------------------- */
+/* ==================================================
+   SECTION LABEL
+================================================== */
 
 .section-label {
+
+  margin:
+    2rem 0 0.7rem;
 
   font-family:
     'JetBrains Mono',
@@ -229,128 +245,17 @@ h1 {
   letter-spacing:
     0.08em;
 
-  margin:
-    2rem 0 0.7rem;
-
 }
 
 
-/* -----------------------------------------------
-   Code panel
------------------------------------------------- */
-
-.code-panel {
-
-  background:
-    var(--panel);
-
-  border:
-    1px solid var(--line);
-
-  border-radius:
-    var(--radius);
-
-  overflow:
-    hidden;
-
-}
-
-
-.code-head {
-
-  display:
-    flex;
-
-  justify-content:
-    space-between;
-
-  align-items:
-    center;
-
-  gap:
-    1rem;
-
-  padding:
-    0.7rem 1rem;
-
-  border-bottom:
-    1px solid var(--line);
-
-  font-family:
-    'JetBrains Mono',
-    monospace;
-
-  font-size:
-    0.75rem;
-
-  color:
-    var(--text-dim);
-
-}
-
-
-.code-head a {
-
-  color:
-    var(--accent);
-
-  text-decoration:
-    none;
-
-  border-bottom:
-    1px solid var(--accent-dim);
-
-}
-
-
-.code-head a:hover {
-
-  border-bottom-color:
-    var(--accent);
-
-}
-
-
-pre {
-
-  margin:
-    0;
-
-  overflow-x:
-    auto;
-
-}
-
-
-pre code.hljs {
-
-  font-family:
-    'JetBrains Mono',
-    monospace;
-
-  font-size:
-    0.85rem;
-
-  line-height:
-    1.6;
-
-  padding:
-    1.2rem 1.4rem !important;
-
-  background:
-    transparent !important;
-
-}
-
-
-/* -----------------------------------------------
-   Terminal
------------------------------------------------- */
+/* ==================================================
+   LIVE TERMINAL
+================================================== */
 
 .terminal-panel {
 
   background:
-    #0F1115;
+    var(--terminal);
 
   border:
     1px solid var(--line);
@@ -488,9 +393,9 @@ pre code.hljs {
 }
 
 
-/* -----------------------------------------------
-   Input
------------------------------------------------- */
+/* ==================================================
+   INPUT
+================================================== */
 
 .input-panel {
 
@@ -517,6 +422,9 @@ pre code.hljs {
   display:
     block;
 
+  margin-bottom:
+    0.6rem;
+
   font-family:
     'JetBrains Mono',
     monospace;
@@ -527,8 +435,22 @@ pre code.hljs {
   color:
     var(--text-dim);
 
-  margin-bottom:
-    0.6rem;
+}
+
+
+.input-help {
+
+  display:
+    block;
+
+  margin-top:
+    0.25rem;
+
+  color:
+    var(--text-dim);
+
+  opacity:
+    0.8;
 
 }
 
@@ -586,9 +508,9 @@ textarea:focus {
 }
 
 
-/* -----------------------------------------------
-   Buttons
------------------------------------------------- */
+/* ==================================================
+   BUTTONS
+================================================== */
 
 .controls {
 
@@ -667,9 +589,6 @@ button.primary:hover {
   background:
     #E0B66C;
 
-  color:
-    #14171C;
-
 }
 
 
@@ -684,9 +603,9 @@ button:disabled {
 }
 
 
-/* -----------------------------------------------
-   Info
------------------------------------------------- */
+/* ==================================================
+   COMPATIBILITY NOTE
+================================================== */
 
 .compatibility {
 
@@ -715,7 +634,122 @@ button:disabled {
 }
 
 
+/* ==================================================
+   SOURCE CODE
+================================================== */
+
+.code-panel {
+
+  background:
+    var(--panel);
+
+  border:
+    1px solid var(--line);
+
+  border-radius:
+    var(--radius);
+
+  overflow:
+    hidden;
+
+}
+
+
+.code-head {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  align-items:
+    center;
+
+  gap:
+    1rem;
+
+  padding:
+    0.7rem 1rem;
+
+  border-bottom:
+    1px solid var(--line);
+
+  font-family:
+    'JetBrains Mono',
+    monospace;
+
+  font-size:
+    0.75rem;
+
+  color:
+    var(--text-dim);
+
+}
+
+
+.code-head a {
+
+  color:
+    var(--accent);
+
+  text-decoration:
+    none;
+
+  border-bottom:
+    1px solid var(--accent-dim);
+
+}
+
+
+.code-head a:hover {
+
+  border-bottom-color:
+    var(--accent);
+
+}
+
+
+pre {
+
+  margin:
+    0;
+
+  overflow-x:
+    auto;
+
+}
+
+
+pre code.hljs {
+
+  padding:
+    1.2rem 1.4rem !important;
+
+  background:
+    transparent !important;
+
+  font-family:
+    'JetBrains Mono',
+    monospace;
+
+  font-size:
+    0.85rem;
+
+  line-height:
+    1.6;
+
+}
+
+
+/* ==================================================
+   ERROR
+================================================== */
+
 .status {
+
+  padding:
+    1rem 0;
 
   font-family:
     'JetBrains Mono',
@@ -726,9 +760,6 @@ button:disabled {
 
   color:
     var(--text-dim);
-
-  padding:
-    1rem 0;
 
 }
 
@@ -741,9 +772,9 @@ button:disabled {
 }
 
 
-/* -----------------------------------------------
-   Mobile
------------------------------------------------- */
+/* ==================================================
+   MOBILE
+================================================== */
 
 @media (max-width: 600px) {
 
@@ -763,22 +794,6 @@ button:disabled {
   }
 
 
-  pre code.hljs {
-
-    font-size:
-      0.75rem;
-
-  }
-
-
-  #terminal {
-
-    font-size:
-      0.75rem;
-
-  }
-
-
   .controls {
 
     flex-direction:
@@ -791,6 +806,22 @@ button:disabled {
 
     width:
       100%;
+
+  }
+
+
+  #terminal {
+
+    font-size:
+      0.75rem;
+
+  }
+
+
+  pre code.hljs {
+
+    font-size:
+      0.75rem;
 
   }
 
@@ -814,10 +845,13 @@ button:disabled {
 
 <body>
 
+
 <div class="wrap">
 
 
-  <!-- Navigation -->
+  <!-- ==================================================
+       NAVIGATION
+  ================================================== -->
 
   <div class="nav">
 
@@ -825,16 +859,17 @@ button:disabled {
       ← all days
     </a>
 
-    <a
-      href="https://toomkris.github.io/"
-    >
+    <a href="https://toomkris.github.io/">
       portfolio
     </a>
 
   </div>
 
 
-  <!-- Header -->
+
+  <!-- ==================================================
+       PROJECT HEADER
+  ================================================== -->
 
   <header class="hero">
 
@@ -852,44 +887,11 @@ button:disabled {
   </header>
 
 
-  <!-- Python source -->
 
-  <div class="section-label">
-    Source code
-  </div>
-
-
-  <div class="code-panel">
-
-    <div class="code-head">
-
-      <span id="filename">
-        —
-      </span>
-
-      <a
-        id="github-link"
-        href="#"
-        target="_blank"
-        rel="noopener"
-      >
-        view on GitHub →
-      </a>
-
-    </div>
-
-
-    <pre>
-<code
-  id="code"
-  class="language-python"
->loading…</code>
-    </pre>
-
-  </div>
-
-
-  <!-- Live demo -->
+  <!-- ==================================================
+       LIVE DEMO
+       THIS IS NOW FIRST
+  ================================================== -->
 
   <div class="section-label">
     Live demo
@@ -903,6 +905,7 @@ button:disabled {
       <span>
         Python terminal
       </span>
+
 
       <span class="terminal-status">
 
@@ -920,12 +923,15 @@ button:disabled {
     </div>
 
 
-    <pre id="terminal">Loading Python runtime…</pre>
+    <pre id="terminal">Starting Python…</pre>
 
   </div>
 
 
-  <!-- User input -->
+
+  <!-- ==================================================
+       INPUT
+  ================================================== -->
 
   <div class="input-panel">
 
@@ -933,11 +939,13 @@ button:disabled {
       class="input-label"
       for="program-input"
     >
+
       Program input
-      <br>
-      <span>
+
+      <span class="input-help">
         Put one answer on each line.
       </span>
+
     </label>
 
 
@@ -947,9 +955,9 @@ button:disabled {
 
 0
 
-or:
+For a game with multiple inputs:
 
-hello
+0
 5
 yes"
     ></textarea>
@@ -977,19 +985,62 @@ yes"
 
     <div class="compatibility">
 
-      This runs the original Python code directly
-      in your browser using WebAssembly.
+      This executes the original Python code
+      directly in your browser using Pyodide.
 
-      Console projects using standard Python libraries
-      should work.
+      Console projects using standard Python
+      libraries should work.
 
-      GUI applications such as Tkinter, pygame,
-      or programs requiring a Python server may not
-      work in the browser.
+      GUI applications such as Tkinter,
+      pygame, or programs requiring a server
+      cannot run normally inside GitHub Pages.
 
     </div>
 
   </div>
+
+
+
+  <!-- ==================================================
+       SOURCE CODE
+       THIS IS NOW SECOND
+  ================================================== -->
+
+  <div class="section-label">
+    Source code
+  </div>
+
+
+  <div class="code-panel">
+
+    <div class="code-head">
+
+      <span id="filename">
+        —
+      </span>
+
+
+      <a
+        id="github-link"
+        href="#"
+        target="_blank"
+        rel="noopener"
+      >
+        view on GitHub →
+      </a>
+
+    </div>
+
+
+    <pre>
+<code
+  id="code"
+  class="language-python"
+>Loading source code…</code>
+    </pre>
+
+  </div>
+
 
 
   <p
@@ -1002,23 +1053,33 @@ yes"
 </div>
 
 
-<!-- Highlight.js -->
+
+<!-- ==================================================
+     HIGHLIGHT.JS
+================================================== -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
 
 
-<!-- Pyodide -->
 
-<script src="https://cdn.jsdelivr.net/pyodide/v0.314.0/full/pyodide.js"></script>
+<!-- ==================================================
+     PYODIDE
+
+     IMPORTANT:
+     314.0.6 is the current stable version.
+================================================== -->
+
+<script src="https://cdn.jsdelivr.net/pyodide/v314.0.6/full/pyodide.js"></script>
+
 
 
 <script>
 
 
 // ==================================================
-// CONFIGURATION
+// CONFIG
 // ==================================================
 
 const OWNER =
@@ -1052,7 +1113,7 @@ const title =
 
 
 // ==================================================
-// PAGE ELEMENTS
+// ELEMENTS
 // ==================================================
 
 const titleEl =
@@ -1093,7 +1154,7 @@ const statusDot =
 
 
 // ==================================================
-// PYODIDE
+// PYTHON
 // ==================================================
 
 let pyodide =
@@ -1104,7 +1165,7 @@ let sourceCode =
 
 
 // ==================================================
-// Terminal helpers
+// STATUS
 // ==================================================
 
 function setRuntimeStatus(
@@ -1118,6 +1179,7 @@ function setRuntimeStatus(
   statusDot.className =
     "status-dot";
 
+
   if (state) {
 
     statusDot.classList.add(
@@ -1125,6 +1187,18 @@ function setRuntimeStatus(
     );
 
   }
+
+}
+
+
+// ==================================================
+// TERMINAL
+// ==================================================
+
+function clearTerminal() {
+
+  terminalEl.textContent =
+    "";
 
 }
 
@@ -1140,16 +1214,8 @@ function writeTerminal(text) {
 }
 
 
-function clearTerminal() {
-
-  terminalEl.textContent =
-    "";
-
-}
-
-
 // ==================================================
-// Load Python source
+// LOAD SOURCE CODE
 // ==================================================
 
 async function loadSource() {
@@ -1166,14 +1232,14 @@ async function loadSource() {
 
     terminalEl.textContent =
       "No Python file was specified.\n\n" +
-      "Go back to the project list and choose a project.";
+      "Go back and choose a project.";
 
     return;
 
   }
 
 
-  // Page information
+  // Page title
 
   if (title) {
 
@@ -1198,13 +1264,13 @@ async function loadSource() {
     file;
 
 
-  // GitHub link
+  // GitHub source link
 
   githubLinkEl.href =
     `https://github.com/${OWNER}/${REPO}/blob/${BRANCH}/${encodeURIComponent(file)}`;
 
 
-  // Load raw Python
+  // Download source
 
   try {
 
@@ -1227,8 +1293,6 @@ async function loadSource() {
       await response.text();
 
 
-    // Display source
-
     codeEl.textContent =
       sourceCode;
 
@@ -1245,6 +1309,9 @@ async function loadSource() {
 
   catch (error) {
 
+    console.error(error);
+
+
     statusEl.textContent =
       `Couldn't load ${file}: ${error.message}`;
 
@@ -1254,18 +1321,13 @@ async function loadSource() {
     statusEl.style.display =
       "block";
 
-    setRuntimeStatus(
-      "Source error",
-      "error"
-    );
-
   }
 
 }
 
 
 // ==================================================
-// Load Pyodide
+// LOAD PYODIDE
 // ==================================================
 
 async function loadPython() {
@@ -1279,11 +1341,32 @@ async function loadPython() {
 
 
     terminalEl.textContent =
-      "Loading Python runtime…\n";
+      "Loading Python runtime…\n\n" +
+      "This can take a few seconds the first time.";
+
+
+    // IMPORTANT:
+    // loadPyodide() comes from the script above.
+
+    if (
+      typeof loadPyodide !==
+      "function"
+    ) {
+
+      throw new Error(
+        "Pyodide failed to load. Check the browser connection or CDN."
+      );
+
+    }
 
 
     pyodide =
-      await loadPyodide();
+      await loadPyodide({
+
+        indexURL:
+          "https://cdn.jsdelivr.net/pyodide/v314.0.6/full/"
+
+      });
 
 
     setRuntimeStatus(
@@ -1294,8 +1377,8 @@ async function loadPython() {
 
     terminalEl.textContent =
       "Python is ready.\n\n" +
-      "Enter the program input above, " +
-      "then click Run project.\n";
+      "Enter the program input above and " +
+      "click Run project.";
 
 
     runButton.disabled =
@@ -1324,7 +1407,7 @@ async function loadPython() {
 
 
 // ==================================================
-// Run Python project
+// RUN PROJECT
 // ==================================================
 
 async function runProject() {
@@ -1339,7 +1422,7 @@ async function runProject() {
   if (!sourceCode) {
 
     terminalEl.textContent =
-      "No Python source code loaded.";
+      "Python source code has not loaded yet.";
 
     return;
 
@@ -1359,9 +1442,9 @@ async function runProject() {
   clearTerminal();
 
 
-  // -----------------------------------------------
-  // Prepare input
-  // -----------------------------------------------
+  // ==================================================
+  // INPUT
+  // ==================================================
 
   const lines =
     inputEl.value
@@ -1373,9 +1456,9 @@ async function runProject() {
     0;
 
 
-  // -----------------------------------------------
-  // Capture stdout
-  // -----------------------------------------------
+  // ==================================================
+  // STDOUT
+  // ==================================================
 
   pyodide.setStdout({
 
@@ -1391,9 +1474,9 @@ async function runProject() {
   });
 
 
-  // -----------------------------------------------
-  // Capture stderr
-  // -----------------------------------------------
+  // ==================================================
+  // STDERR
+  // ==================================================
 
   pyodide.setStderr({
 
@@ -1409,9 +1492,9 @@ async function runProject() {
   });
 
 
-  // -----------------------------------------------
-  // Provide input()
-  // -----------------------------------------------
+  // ==================================================
+  // STDIN
+  // ==================================================
 
   pyodide.setStdin({
 
@@ -1442,9 +1525,9 @@ async function runProject() {
   });
 
 
-  // -----------------------------------------------
-  // Run actual Python
-  // -----------------------------------------------
+  // ==================================================
+  // EXECUTE ORIGINAL PYTHON
+  // ==================================================
 
   try {
 
@@ -1460,7 +1543,7 @@ async function runProject() {
 
 
     writeTerminal(
-      "\n\n✓ Program finished."
+      "\n✓ Program finished."
     );
 
   }
@@ -1488,7 +1571,7 @@ async function runProject() {
 
 
 // ==================================================
-// Buttons
+// BUTTONS
 // ==================================================
 
 runButton.addEventListener(
@@ -1504,8 +1587,7 @@ clearButton.addEventListener(
 
 
 // ==================================================
-// Keyboard shortcut
-// Ctrl + Enter = Run
+// CTRL + ENTER
 // ==================================================
 
 inputEl.addEventListener(
@@ -1518,6 +1600,7 @@ inputEl.addEventListener(
     ) {
 
       event.preventDefault();
+
 
       if (!runButton.disabled) {
 
@@ -1532,14 +1615,18 @@ inputEl.addEventListener(
 
 
 // ==================================================
-// Start page
+// START
 // ==================================================
 
 loadSource();
 
 loadPython();
 
+
 </script>
 
+</body>
+
+</html>
 </body>
 </html>
