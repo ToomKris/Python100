@@ -1,0 +1,27 @@
+[
+  {
+    "day": 3,
+    "title": "Treasure Island",
+    "file": "treasureisland_d3.py"
+  },
+  {
+    "day": 4,
+    "title": "Rock Paper Scissors",
+    "file": "rockpaperscissors_d4.py"
+  },
+  {
+    "day": 5,
+    "title": "Password Generator",
+    "file": "passwordgenerator_d5.py"
+  },
+  {
+    "day": 7,
+    "title": "Hangman",
+    "file": "hangman_d7.py"
+  },
+  {
+    "day": 8,
+    "title": "Caesar Cipher",
+    "file": "ceasar_cipher_d8.py"
+  }
+]
