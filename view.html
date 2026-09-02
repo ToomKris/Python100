@@ -1,172 +1,1544 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
 <title>Loading… — Python100</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+
+<link
+  rel="preconnect"
+  href="https://fonts.googleapis.com"
+>
+
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+  rel="stylesheet"
+>
+
+
+<!-- Highlight.js -->
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css"
+>
+
+
 <style>
-  :root {
-    --bg: #14171C;
-    --panel: #1B1F26;
-    --line: #262B33;
-    --text: #E8E6E1;
-    --text-dim: #8B92A0;
-    --accent: #D4A657;
-    --accent-dim: #8A7142;
-    --radius: 3px;
+
+:root {
+
+  --bg: #14171C;
+  --panel: #1B1F26;
+  --line: #262B33;
+
+  --text: #E8E6E1;
+  --text-dim: #8B92A0;
+
+  --accent: #D4A657;
+  --accent-dim: #8A7142;
+
+  --success: #8FB996;
+  --error: #C97A6B;
+
+  --radius: 3px;
+
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+
+body {
+
+  margin: 0;
+
+  background:
+    var(--bg);
+
+  color:
+    var(--text);
+
+  font-family:
+    'Fraunces',
+    Georgia,
+    serif;
+
+  -webkit-font-smoothing:
+    antialiased;
+
+}
+
+
+a {
+  color: inherit;
+}
+
+
+.wrap {
+
+  max-width:
+    780px;
+
+  margin:
+    0 auto;
+
+  padding:
+    4rem 1.5rem 6rem;
+
+}
+
+
+/* -----------------------------------------------
+   Navigation
+------------------------------------------------ */
+
+.nav {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  align-items:
+    baseline;
+
+  margin-bottom:
+    2rem;
+
+  font-family:
+    'JetBrains Mono',
+    monospace;
+
+  font-size:
+    0.78rem;
+
+}
+
+
+.nav a {
+
+  color:
+    var(--text-dim);
+
+  text-decoration:
+    none;
+
+  border-bottom:
+    1px solid var(--line);
+
+}
+
+
+.nav a:hover {
+
+  color:
+    var(--accent);
+
+  border-bottom-color:
+    var(--accent-dim);
+
+}
+
+
+/* -----------------------------------------------
+   Header
+------------------------------------------------ */
+
+header.hero {
+
+  margin-bottom:
+    2.2rem;
+
+}
+
+
+.day-label {
+
+  font-family:
+    'JetBrains Mono',
+    monospace;
+
+  font-size:
+    0.8rem;
+
+  color:
+    var(--accent);
+
+  display:
+    block;
+
+  margin-bottom:
+    0.5rem;
+
+}
+
+
+h1 {
+
+  font-size:
+    clamp(1.7rem, 4vw, 2.2rem);
+
+  font-weight:
+    500;
+
+  margin:
+    0;
+
+  letter-spacing:
+    -0.01em;
+
+}
+
+
+/* -----------------------------------------------
+   Section labels
+------------------------------------------------ */
+
+.section-label {
+
+  font-family:
+    'JetBrains Mono',
+    monospace;
+
+  font-size:
+    0.75rem;
+
+  color:
+    var(--text-dim);
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    0.08em;
+
+  margin:
+    2rem 0 0.7rem;
+
+}
+
+
+/* -----------------------------------------------
+   Code panel
+------------------------------------------------ */
+
+.code-panel {
+
+  background:
+    var(--panel);
+
+  border:
+    1px solid var(--line);
+
+  border-radius:
+    var(--radius);
+
+  overflow:
+    hidden;
+
+}
+
+
+.code-head {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  align-items:
+    center;
+
+  gap:
+    1rem;
+
+  padding:
+    0.7rem 1rem;
+
+  border-bottom:
+    1px solid var(--line);
+
+  font-family:
+    'JetBrains Mono',
+    monospace;
+
+  font-size:
+    0.75rem;
+
+  color:
+    var(--text-dim);
+
+}
+
+
+.code-head a {
+
+  color:
+    var(--accent);
+
+  text-decoration:
+    none;
+
+  border-bottom:
+    1px solid var(--accent-dim);
+
+}
+
+
+.code-head a:hover {
+
+  border-bottom-color:
+    var(--accent);
+
+}
+
+
+pre {
+
+  margin:
+    0;
+
+  overflow-x:
+    auto;
+
+}
+
+
+pre code.hljs {
+
+  font-family:
+    'JetBrains Mono',
+    monospace;
+
+  font-size:
+    0.85rem;
+
+  line-height:
+    1.6;
+
+  padding:
+    1.2rem 1.4rem !important;
+
+  background:
+    transparent !important;
+
+}
+
+
+/* -----------------------------------------------
+   Terminal
+------------------------------------------------ */
+
+.terminal-panel {
+
+  background:
+    #0F1115;
+
+  border:
+    1px solid var(--line);
+
+  border-radius:
+    var(--radius);
+
+  overflow:
+    hidden;
+
+}
+
+
+.terminal-head {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  align-items:
+    center;
+
+  padding:
+    0.7rem 1rem;
+
+  border-bottom:
+    1px solid var(--line);
+
+  font-family:
+    'JetBrains Mono',
+    monospace;
+
+  font-size:
+    0.75rem;
+
+  color:
+    var(--text-dim);
+
+}
+
+
+.terminal-status {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    0.5rem;
+
+}
+
+
+.status-dot {
+
+  width:
+    7px;
+
+  height:
+    7px;
+
+  border-radius:
+    50%;
+
+  background:
+    var(--text-dim);
+
+}
+
+
+.status-dot.ready {
+
+  background:
+    var(--success);
+
+}
+
+
+.status-dot.running {
+
+  background:
+    var(--accent);
+
+}
+
+
+.status-dot.error {
+
+  background:
+    var(--error);
+
+}
+
+
+#terminal {
+
+  min-height:
+    220px;
+
+  max-height:
+    500px;
+
+  overflow-y:
+    auto;
+
+  padding:
+    1.1rem 1.2rem;
+
+  margin:
+    0;
+
+  white-space:
+    pre-wrap;
+
+  word-break:
+    break-word;
+
+  font-family:
+    'JetBrains Mono',
+    monospace;
+
+  font-size:
+    0.82rem;
+
+  line-height:
+    1.6;
+
+  color:
+    var(--text);
+
+}
+
+
+/* -----------------------------------------------
+   Input
+------------------------------------------------ */
+
+.input-panel {
+
+  margin-top:
+    1rem;
+
+  background:
+    var(--panel);
+
+  border:
+    1px solid var(--line);
+
+  border-radius:
+    var(--radius);
+
+  padding:
+    1rem;
+
+}
+
+
+.input-label {
+
+  display:
+    block;
+
+  font-family:
+    'JetBrains Mono',
+    monospace;
+
+  font-size:
+    0.75rem;
+
+  color:
+    var(--text-dim);
+
+  margin-bottom:
+    0.6rem;
+
+}
+
+
+textarea {
+
+  width:
+    100%;
+
+  min-height:
+    100px;
+
+  resize:
+    vertical;
+
+  padding:
+    0.8rem;
+
+  background:
+    #101217;
+
+  color:
+    var(--text);
+
+  border:
+    1px solid var(--line);
+
+  border-radius:
+    var(--radius);
+
+  font-family:
+    'JetBrains Mono',
+    monospace;
+
+  font-size:
+    0.82rem;
+
+  line-height:
+    1.5;
+
+}
+
+
+textarea:focus {
+
+  outline:
+    2px solid var(--accent);
+
+  outline-offset:
+    1px;
+
+  border-color:
+    var(--accent);
+
+}
+
+
+/* -----------------------------------------------
+   Buttons
+------------------------------------------------ */
+
+.controls {
+
+  display:
+    flex;
+
+  gap:
+    0.7rem;
+
+  margin-top:
+    0.8rem;
+
+}
+
+
+button {
+
+  border:
+    1px solid var(--line);
+
+  background:
+    var(--panel);
+
+  color:
+    var(--text);
+
+  padding:
+    0.65rem 1rem;
+
+  border-radius:
+    var(--radius);
+
+  font-family:
+    'JetBrains Mono',
+    monospace;
+
+  font-size:
+    0.78rem;
+
+  cursor:
+    pointer;
+
+}
+
+
+button:hover {
+
+  border-color:
+    var(--accent-dim);
+
+  color:
+    var(--accent);
+
+}
+
+
+button.primary {
+
+  background:
+    var(--accent);
+
+  color:
+    #14171C;
+
+  border-color:
+    var(--accent);
+
+  font-weight:
+    600;
+
+}
+
+
+button.primary:hover {
+
+  background:
+    #E0B66C;
+
+  color:
+    #14171C;
+
+}
+
+
+button:disabled {
+
+  opacity:
+    0.5;
+
+  cursor:
+    not-allowed;
+
+}
+
+
+/* -----------------------------------------------
+   Info
+------------------------------------------------ */
+
+.compatibility {
+
+  margin-top:
+    0.8rem;
+
+  padding:
+    0.8rem 1rem;
+
+  border-left:
+    2px solid var(--accent-dim);
+
+  color:
+    var(--text-dim);
+
+  font-family:
+    'JetBrains Mono',
+    monospace;
+
+  font-size:
+    0.72rem;
+
+  line-height:
+    1.6;
+
+}
+
+
+.status {
+
+  font-family:
+    'JetBrains Mono',
+    monospace;
+
+  font-size:
+    0.82rem;
+
+  color:
+    var(--text-dim);
+
+  padding:
+    1rem 0;
+
+}
+
+
+.status.error {
+
+  color:
+    var(--error);
+
+}
+
+
+/* -----------------------------------------------
+   Mobile
+------------------------------------------------ */
+
+@media (max-width: 600px) {
+
+  .wrap {
+
+    padding:
+      2.5rem 1rem 4rem;
+
   }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Fraunces', Georgia, serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: inherit; }
-  .wrap { max-width: 780px; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+
 
   .nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 2rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem;
-  }
-  .nav a { color: var(--text-dim); text-decoration: none; border-bottom: 1px solid var(--line); }
-  .nav a:hover { color: var(--accent); border-bottom-color: var(--accent-dim); }
 
-  header.hero { margin-bottom: 2.2rem; }
-  .day-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
-    color: var(--accent);
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-  h1 {
-    font-size: clamp(1.7rem, 4vw, 2.2rem);
-    font-weight: 500;
-    margin: 0;
-    letter-spacing: -0.01em;
+    font-size:
+      0.7rem;
+
   }
 
-  .code-panel {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .code-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.7rem 1rem;
-    border-bottom: 1px solid var(--line);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--text-dim);
-  }
-  .code-head a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-dim); }
-  .code-head a:hover { border-bottom-color: var(--accent); }
 
-  pre { margin: 0; overflow-x: auto; }
   pre code.hljs {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.85rem;
-    line-height: 1.6;
-    padding: 1.2rem 1.4rem !important;
-    background: transparent !important;
+
+    font-size:
+      0.75rem;
+
   }
 
-  .status {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.85rem;
-    color: var(--text-dim);
-    padding: 2rem 0;
-  }
-  .status.error { color: #C97A6B; }
 
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #terminal {
+
+    font-size:
+      0.75rem;
+
+  }
+
+
+  .controls {
+
+    flex-direction:
+      column;
+
+  }
+
+
+  button {
+
+    width:
+      100%;
+
+  }
+
+}
+
+
+:focus-visible {
+
+  outline:
+    2px solid var(--accent);
+
+  outline-offset:
+    2px;
+
+}
+
 </style>
+
 </head>
+
+
 <body>
+
 <div class="wrap">
 
+
+  <!-- Navigation -->
+
   <div class="nav">
-    <a href="index.html">← all days</a>
-    <a href="https://toomkris.github.io/">portfolio</a>
+
+    <a href="./index.html">
+      ← all days
+    </a>
+
+    <a
+      href="https://toomkris.github.io/"
+    >
+      portfolio
+    </a>
+
   </div>
+
+
+  <!-- Header -->
 
   <header class="hero">
-    <span class="day-label" id="day-label">day —</span>
-    <h1 id="title">Loading…</h1>
+
+    <span
+      class="day-label"
+      id="day-label"
+    >
+      day —
+    </span>
+
+    <h1 id="title">
+      Loading…
+    </h1>
+
   </header>
 
-  <div class="code-panel">
-    <div class="code-head">
-      <span id="filename">—</span>
-      <a id="github-link" href="#" target="_blank" rel="noopener">view on GitHub →</a>
-    </div>
-    <pre><code id="code" class="language-python">loading…</code></pre>
+
+  <!-- Python source -->
+
+  <div class="section-label">
+    Source code
   </div>
 
-  <p class="status" id="status" style="display:none;"></p>
+
+  <div class="code-panel">
+
+    <div class="code-head">
+
+      <span id="filename">
+        —
+      </span>
+
+      <a
+        id="github-link"
+        href="#"
+        target="_blank"
+        rel="noopener"
+      >
+        view on GitHub →
+      </a>
+
+    </div>
+
+
+    <pre>
+<code
+  id="code"
+  class="language-python"
+>loading…</code>
+    </pre>
+
+  </div>
+
+
+  <!-- Live demo -->
+
+  <div class="section-label">
+    Live demo
+  </div>
+
+
+  <div class="terminal-panel">
+
+    <div class="terminal-head">
+
+      <span>
+        Python terminal
+      </span>
+
+      <span class="terminal-status">
+
+        <span
+          id="status-dot"
+          class="status-dot"
+        ></span>
+
+        <span id="runtime-status">
+          loading Python…
+        </span>
+
+      </span>
+
+    </div>
+
+
+    <pre id="terminal">Loading Python runtime…</pre>
+
+  </div>
+
+
+  <!-- User input -->
+
+  <div class="input-panel">
+
+    <label
+      class="input-label"
+      for="program-input"
+    >
+      Program input
+      <br>
+      <span>
+        Put one answer on each line.
+      </span>
+    </label>
+
+
+    <textarea
+      id="program-input"
+      placeholder="Example:
+
+0
+
+or:
+
+hello
+5
+yes"
+    ></textarea>
+
+
+    <div class="controls">
+
+      <button
+        id="run-button"
+        class="primary"
+        disabled
+      >
+        ▶ Run project
+      </button>
+
+
+      <button
+        id="clear-button"
+      >
+        Clear terminal
+      </button>
+
+    </div>
+
+
+    <div class="compatibility">
+
+      This runs the original Python code directly
+      in your browser using WebAssembly.
+
+      Console projects using standard Python libraries
+      should work.
+
+      GUI applications such as Tkinter, pygame,
+      or programs requiring a Python server may not
+      work in the browser.
+
+    </div>
+
+  </div>
+
+
+  <p
+    class="status"
+    id="status"
+    style="display:none;"
+  ></p>
+
 
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+<!-- Highlight.js -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+
+
+<!-- Pyodide -->
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.314.0/full/pyodide.js"></script>
+
+
 <script>
-  const OWNER = "ToomKris";
-  const REPO = "Python100";
-  const BRANCH = "main";
 
-  const params = new URLSearchParams(window.location.search);
-  const file = params.get("file");
-  const day = params.get("day");
-  const title = params.get("title");
 
-  const titleEl = document.getElementById("title");
-  const dayLabelEl = document.getElementById("day-label");
-  const filenameEl = document.getElementById("filename");
-  const githubLinkEl = document.getElementById("github-link");
-  const codeEl = document.getElementById("code");
-  const statusEl = document.getElementById("status");
+// ==================================================
+// CONFIGURATION
+// ==================================================
+
+const OWNER =
+  "ToomKris";
+
+const REPO =
+  "Python100";
+
+const BRANCH =
+  "main";
+
+
+// ==================================================
+// URL PARAMETERS
+// ==================================================
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+
+const file =
+  params.get("file");
+
+const day =
+  params.get("day");
+
+const title =
+  params.get("title");
+
+
+// ==================================================
+// PAGE ELEMENTS
+// ==================================================
+
+const titleEl =
+  document.getElementById("title");
+
+const dayLabelEl =
+  document.getElementById("day-label");
+
+const filenameEl =
+  document.getElementById("filename");
+
+const githubLinkEl =
+  document.getElementById("github-link");
+
+const codeEl =
+  document.getElementById("code");
+
+const statusEl =
+  document.getElementById("status");
+
+const terminalEl =
+  document.getElementById("terminal");
+
+const inputEl =
+  document.getElementById("program-input");
+
+const runButton =
+  document.getElementById("run-button");
+
+const clearButton =
+  document.getElementById("clear-button");
+
+const runtimeStatus =
+  document.getElementById("runtime-status");
+
+const statusDot =
+  document.getElementById("status-dot");
+
+
+// ==================================================
+// PYODIDE
+// ==================================================
+
+let pyodide =
+  null;
+
+let sourceCode =
+  "";
+
+
+// ==================================================
+// Terminal helpers
+// ==================================================
+
+function setRuntimeStatus(
+  text,
+  state = ""
+) {
+
+  runtimeStatus.textContent =
+    text;
+
+  statusDot.className =
+    "status-dot";
+
+  if (state) {
+
+    statusDot.classList.add(
+      state
+    );
+
+  }
+
+}
+
+
+function writeTerminal(text) {
+
+  terminalEl.textContent +=
+    text;
+
+  terminalEl.scrollTop =
+    terminalEl.scrollHeight;
+
+}
+
+
+function clearTerminal() {
+
+  terminalEl.textContent =
+    "";
+
+}
+
+
+// ==================================================
+// Load Python source
+// ==================================================
+
+async function loadSource() {
 
   if (!file) {
-    statusEl.textContent = "No file specified — go back and pick a day.";
-    statusEl.className = "status error";
-    codeEl.parentElement.parentElement.style.display = "none";
-  } else {
-    if (title) {
-      titleEl.textContent = title;
-      document.title = `${title} — Python100`;
-    }
-    if (day) dayLabelEl.textContent = `day ${day}`;
-    filenameEl.textContent = file;
-    githubLinkEl.href = `https://github.com/${OWNER}/${REPO}/blob/${BRANCH}/${file}`;
 
-    fetch(`https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${file}`)
-      .then(res => {
-        if (!res.ok) throw new Error(`GitHub returned ${res.status}`);
-        return res.text();
-      })
-      .then(text => {
-        codeEl.textContent = text;
-        if (window.hljs) hljs.highlightElement(codeEl);
-      })
-      .catch(err => {
-        statusEl.textContent = `Couldn't load ${file}: ${err.message}`;
-        statusEl.className = "status error";
-        statusEl.style.display = "block";
-      });
+    titleEl.textContent =
+      "No project selected";
+
+    setRuntimeStatus(
+      "No project",
+      "error"
+    );
+
+    terminalEl.textContent =
+      "No Python file was specified.\n\n" +
+      "Go back to the project list and choose a project.";
+
+    return;
+
   }
+
+
+  // Page information
+
+  if (title) {
+
+    titleEl.textContent =
+      title;
+
+    document.title =
+      `${title} — Python100`;
+
+  }
+
+
+  if (day) {
+
+    dayLabelEl.textContent =
+      `day ${day}`;
+
+  }
+
+
+  filenameEl.textContent =
+    file;
+
+
+  // GitHub link
+
+  githubLinkEl.href =
+    `https://github.com/${OWNER}/${REPO}/blob/${BRANCH}/${encodeURIComponent(file)}`;
+
+
+  // Load raw Python
+
+  try {
+
+    const response =
+      await fetch(
+        `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${encodeURIComponent(file)}`
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        `GitHub returned ${response.status}`
+      );
+
+    }
+
+
+    sourceCode =
+      await response.text();
+
+
+    // Display source
+
+    codeEl.textContent =
+      sourceCode;
+
+
+    if (window.hljs) {
+
+      hljs.highlightElement(
+        codeEl
+      );
+
+    }
+
+  }
+
+  catch (error) {
+
+    statusEl.textContent =
+      `Couldn't load ${file}: ${error.message}`;
+
+    statusEl.className =
+      "status error";
+
+    statusEl.style.display =
+      "block";
+
+    setRuntimeStatus(
+      "Source error",
+      "error"
+    );
+
+  }
+
+}
+
+
+// ==================================================
+// Load Pyodide
+// ==================================================
+
+async function loadPython() {
+
+  try {
+
+    setRuntimeStatus(
+      "loading Python…",
+      "running"
+    );
+
+
+    terminalEl.textContent =
+      "Loading Python runtime…\n";
+
+
+    pyodide =
+      await loadPyodide();
+
+
+    setRuntimeStatus(
+      "ready",
+      "ready"
+    );
+
+
+    terminalEl.textContent =
+      "Python is ready.\n\n" +
+      "Enter the program input above, " +
+      "then click Run project.\n";
+
+
+    runButton.disabled =
+      false;
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+
+    setRuntimeStatus(
+      "runtime error",
+      "error"
+    );
+
+
+    terminalEl.textContent =
+      "Could not load the Python runtime.\n\n" +
+      error;
+
+  }
+
+}
+
+
+// ==================================================
+// Run Python project
+// ==================================================
+
+async function runProject() {
+
+  if (!pyodide) {
+
+    return;
+
+  }
+
+
+  if (!sourceCode) {
+
+    terminalEl.textContent =
+      "No Python source code loaded.";
+
+    return;
+
+  }
+
+
+  runButton.disabled =
+    true;
+
+
+  setRuntimeStatus(
+    "running",
+    "running"
+  );
+
+
+  clearTerminal();
+
+
+  // -----------------------------------------------
+  // Prepare input
+  // -----------------------------------------------
+
+  const lines =
+    inputEl.value
+      .replace(/\r\n/g, "\n")
+      .split("\n");
+
+
+  let inputIndex =
+    0;
+
+
+  // -----------------------------------------------
+  // Capture stdout
+  // -----------------------------------------------
+
+  pyodide.setStdout({
+
+    batched:
+      text => {
+
+        writeTerminal(
+          text + "\n"
+        );
+
+      }
+
+  });
+
+
+  // -----------------------------------------------
+  // Capture stderr
+  // -----------------------------------------------
+
+  pyodide.setStderr({
+
+    batched:
+      text => {
+
+        writeTerminal(
+          text + "\n"
+        );
+
+      }
+
+  });
+
+
+  // -----------------------------------------------
+  // Provide input()
+  // -----------------------------------------------
+
+  pyodide.setStdin({
+
+    stdin:
+      () => {
+
+        if (
+          inputIndex >=
+          lines.length
+        ) {
+
+          return undefined;
+
+        }
+
+
+        const value =
+          lines[inputIndex];
+
+
+        inputIndex++;
+
+
+        return value;
+
+      }
+
+  });
+
+
+  // -----------------------------------------------
+  // Run actual Python
+  // -----------------------------------------------
+
+  try {
+
+    await pyodide.runPythonAsync(
+      sourceCode
+    );
+
+
+    setRuntimeStatus(
+      "finished",
+      "ready"
+    );
+
+
+    writeTerminal(
+      "\n\n✓ Program finished."
+    );
+
+  }
+
+  catch (error) {
+
+    setRuntimeStatus(
+      "error",
+      "error"
+    );
+
+
+    writeTerminal(
+      "\n\n--- ERROR ---\n\n" +
+      error
+    );
+
+  }
+
+
+  runButton.disabled =
+    false;
+
+}
+
+
+// ==================================================
+// Buttons
+// ==================================================
+
+runButton.addEventListener(
+  "click",
+  runProject
+);
+
+
+clearButton.addEventListener(
+  "click",
+  clearTerminal
+);
+
+
+// ==================================================
+// Keyboard shortcut
+// Ctrl + Enter = Run
+// ==================================================
+
+inputEl.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.ctrlKey &&
+      event.key === "Enter"
+    ) {
+
+      event.preventDefault();
+
+      if (!runButton.disabled) {
+
+        runProject();
+
+      }
+
+    }
+
+  }
+);
+
+
+// ==================================================
+// Start page
+// ==================================================
+
+loadSource();
+
+loadPython();
+
 </script>
 
 </body>
