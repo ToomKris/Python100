@@ -138,6 +138,56 @@
       color: var(--green);
     }
 
+    /* ---------------- TERMINAL INPUT ---------------- */
+
+    .terminal-input-row {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin: 0.15rem 0;
+      width: 100%;
+    }
+
+    .terminal-input-prompt {
+      color: var(--gold-light);
+      white-space: pre-wrap;
+    }
+
+    .terminal-input {
+      flex: 1;
+      min-width: 0;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 13px;
+      padding: 0;
+      caret-color: var(--gold);
+    }
+
+    .terminal-input::selection {
+      background: var(--accent-dim);
+    }
+
+    .terminal-submit {
+      padding: 3px 8px;
+      font-size: 11px;
+      color: var(--gold);
+      border-color: var(--accent-dim);
+    }
+
+    .terminal-submit:hover {
+      color: var(--text);
+      border-color: var(--gold);
+    }
+
+    .terminal-answer {
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
     .controls {
       padding: 18px;
       display: flex;
@@ -299,13 +349,11 @@
 
   <div class="info">
     This runs the original Python code directly in your browser using Pyodide.
-    The program's printed text appears in the terminal first. When it reaches
-    <code>input()</code>, the exact Python question is shown before you are
-    asked for your answer.
+    Program output appears in the terminal first. When the program reaches
+    <code>input()</code>, the question stays in the terminal and an input line
+    appears directly underneath it.
     <br><br>
-    Example: the introduction appears first, then
-    <code>Where do you want to go? left or right?</code>, and only then you
-    enter your answer.
+    Type your answer and press <code>Enter</code>.
   </div>
 
 
@@ -471,49 +519,21 @@
 
       /*
        * --------------------------------------------------------
-       * TERMINAL OUTPUT
+       * TERMINAL I/O
        *
-       * Python input("...") often writes its question without
-       * a newline. We keep that unfinished text in
-       * pendingInputPrompt so it can be displayed BEFORE we
-       * ask the user for the answer.
+       * Python print() output is sent to the terminal.
+       *
+       * Python input() is handled by a real input field INSIDE
+       * the terminal. There are no browser popups.
        * --------------------------------------------------------
        */
 
-      let pendingInputPrompt = "";
-
-      const decoder = new TextDecoder();
-
       pyodide.setStdout({
-        raw: (byte) => {
-
-          const text = decoder.decode(
-            new Uint8Array([byte]),
-            { stream: true }
-          );
-
-          pendingInputPrompt += text;
-
-          /*
-           * If there is a newline, everything before it is
-           * normal printed output. Display it immediately.
-           */
-          if (pendingInputPrompt.includes("\n")) {
-
-            const parts = pendingInputPrompt.split("\n");
-
-            for (let i = 0; i < parts.length - 1; i++) {
-              writeTerminal(parts[i] + "\n");
-            }
-
-            pendingInputPrompt = parts[parts.length - 1];
-          }
+        batched: (text) => {
+          writeTerminal(text);
         }
       });
 
-      /*
-       * Send Python errors to our terminal.
-       */
       pyodide.setStderr({
         batched: (text) => {
           writeTerminal(text, "error");
@@ -522,75 +542,105 @@
 
 
       /*
-       * --------------------------------------------------------
-       * INTERACTIVE INPUT
+       * JavaScript function called by Python's async input().
        *
-       * When Python reaches input(), first show the ACTUAL
-       * question in the terminal.
-       *
-       * Example:
-       *
-       *   You arrive at a path with two directions.
-       *   Where do you want to go? left or right?
-       *
-       * Then ask for the answer.
-       * --------------------------------------------------------
+       * It creates an input line directly inside the terminal and
+       * resolves only when the user presses Enter.
        */
+      window.__terminalInput = function(promptText) {
 
-      pyodide.setStdin({
+        return new Promise((resolve) => {
 
-        stdin: function() {
+          const row = document.createElement("div");
+          row.className = "terminal-input-row";
 
-          const actualPrompt =
-            pendingInputPrompt ||
-            "Input required:";
+          const prompt = document.createElement("span");
+          prompt.className = "terminal-input-prompt";
+          prompt.textContent = promptText || "";
 
-          /*
-           * MOST IMPORTANT LINE:
-           *
-           * Put the Python question into the visible terminal
-           * BEFORE asking for the user's answer.
-           */
-          writeTerminal(actualPrompt, "prompt");
+          const input = document.createElement("input");
+          input.className = "terminal-input";
+          input.type = "text";
+          input.autocomplete = "off";
+          input.spellcheck = false;
 
-          writeTerminal(" ");
+          const submit = () => {
 
-          /*
-           * Show the same actual question in the input dialog.
-           */
-          const answer = window.prompt(
-            actualPrompt.trim(),
-            ""
-          );
+            const value = input.value;
 
-          pendingInputPrompt = "";
+            input.disabled = true;
+            submitButton.disabled = true;
 
-          /*
-           * User clicked Cancel.
-           */
-          if (answer === null) {
+            /*
+             * Keep the answer visible in the terminal.
+             */
+            const answer = document.createElement("span");
+            answer.className = "terminal-answer";
+            answer.textContent = value;
 
-            writeTerminal(
-              "[input cancelled]\n",
-              "error"
+            row.replaceChildren(
+              prompt,
+              answer
             );
 
-            return null;
-          }
+            terminal.scrollTop = terminal.scrollHeight;
 
-          /*
-           * Show the answer in the terminal.
-           */
-          writeTerminal(answer + "\n");
+            resolve(value);
+          };
 
-          return answer;
-        },
+          const submitButton = document.createElement("button");
+          submitButton.className = "terminal-submit";
+          submitButton.type = "button";
+          submitButton.textContent = "Enter";
 
-        isatty: true,
+          submitButton.addEventListener(
+            "click",
+            submit
+          );
 
-        autoEOF: false
-      });
+          input.addEventListener(
+            "keydown",
+            (event) => {
 
+              if (event.key === "Enter") {
+                event.preventDefault();
+                submit();
+              }
+
+            }
+          );
+
+          row.appendChild(prompt);
+          row.appendChild(input);
+          row.appendChild(submitButton);
+
+          terminal.appendChild(row);
+
+          terminal.scrollTop = terminal.scrollHeight;
+
+          setTimeout(() => input.focus(), 0);
+
+        });
+
+      };
+
+
+      /*
+       * Python helper.
+       *
+       * We transform input(...) calls into:
+       *
+       *     await _terminal_input(...)
+       *
+       * so Python can pause while the HTML terminal waits for
+       * the user's answer.
+       */
+      await pyodide.runPythonAsync(`
+import js
+
+async def _terminal_input(prompt=""):
+    return await js.window.__terminalInput(str(prompt))
+      `);
 
       writeTerminal(
         "✓ Python ready. Click \"Run project\".\n\n",
@@ -645,12 +695,39 @@
 
 
       /*
-       * Execute THE ORIGINAL Python source.
+       * Execute the project inside an async Python function.
        *
-       * We are not changing input(), random(), print(), etc.
+       * Python's normal input() blocks execution, which cannot work
+       * with an HTML textbox. We therefore change input(...) calls
+       * to await _terminal_input(...), allowing the browser terminal
+       * to pause and resume the program.
+       *
+       * The source shown below is still the ORIGINAL source file.
+       * Only the browser execution copy is adapted.
        */
+      const executableSource =
+        pythonSource
+          .replace(/\binput\s*\(/g, "_terminal_input(");
+
+      /*
+       * Indent the original program and run it as an async function.
+       * This lets each input call await the terminal input field.
+       */
+      const indentedSource =
+        executableSource
+          .split("\n")
+          .map(line => "    " + line)
+          .join("\n");
+
+      const runnerSource = `
+async def __run_project():
+${indentedSource}
+
+await __run_project()
+`;
+
       await pyodide.runPythonAsync(
-        pythonSource,
+        runnerSource,
         {
           filename: file || "project.py"
         }
