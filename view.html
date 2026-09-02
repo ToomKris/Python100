@@ -724,11 +724,91 @@ async def _terminal_input(prompt=""):
       // The replacement also adds parentheses so expressions such as
       // input("Guess a letter: ").lower() become:
       // (await _terminal_input("Guess a letter: ")).lower()
-      const executableSource =
-        pythonSource.replace(
-          /\binput\s*\(([^\n]*)\)/g,
-          "(await _terminal_input($1))"
-        );
+      // Convert input(...) calls without swallowing anything that comes
+      // after the closing parenthesis, such as .lower(), .strip(), etc.
+      // A small parser is used instead of a greedy regular expression so
+      // expressions like input("...").lower() remain valid Python.
+      function transformInputCalls(source) {
+        let result = "";
+        let i = 0;
+
+        while (i < source.length) {
+          const isInput =
+            source.slice(i, i + 5) === "input" &&
+            (i === 0 || !/[A-Za-z0-9_]/.test(source[i - 1])) &&
+            (i + 5 >= source.length || !/[A-Za-z0-9_]/.test(source[i + 5]));
+
+          if (!isInput) {
+            result += source[i++];
+            continue;
+          }
+
+          let j = i + 5;
+          while (j < source.length && /\s/.test(source[j])) j++;
+
+          if (source[j] !== "(") {
+            result += source[i++];
+            continue;
+          }
+
+          const open = j;
+          let depth = 0;
+          let quote = null;
+          let triple = false;
+          let k = open;
+
+          for (; k < source.length; k++) {
+            const ch = source[k];
+            const next3 = source.slice(k, k + 3);
+
+            if (quote) {
+              if (triple) {
+                if (next3 === quote.repeat(3)) {
+                  k += 2;
+                  quote = null;
+                  triple = false;
+                }
+              } else if (ch === "\\") {
+                k++;
+              } else if (ch === quote) {
+                quote = null;
+              }
+              continue;
+            }
+
+            if ((ch === "\"" || ch === "'") && source.slice(k, k + 3) === ch.repeat(3)) {
+              quote = ch;
+              triple = true;
+              k += 2;
+              continue;
+            }
+
+            if (ch === "\"" || ch === "'") {
+              quote = ch;
+              continue;
+            }
+
+            if (ch === "(") depth++;
+            if (ch === ")") {
+              depth--;
+              if (depth === 0) break;
+            }
+          }
+
+          if (depth !== 0) {
+            result += source[i++];
+            continue;
+          }
+
+          const args = source.slice(open + 1, k);
+          result += "(await _terminal_input(" + args + "))";
+          i = k + 1;
+        }
+
+        return result;
+      }
+
+      const executableSource = transformInputCalls(pythonSource);
 
       /*
        * Indent the original program and run it as an async function.
