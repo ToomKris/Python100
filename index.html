@@ -705,12 +705,11 @@ async function loadProjects() {
         : 0;
 
 
-    progressText.textContent =
-      `${projects.length} of 100 days pushed · latest: day ${latestDay}`;
+   progressText.textContent =
+  `day ${latestDay} of 100 · ${projects.length} projects`;
 
-
-    progressFill.style.width =
-      `${Math.min(latestDay, 100)}%`;
+progressFill.style.width =
+  `${Math.min(latestDay, 100)}%`;
 
 
     // ----------------------------------------------
