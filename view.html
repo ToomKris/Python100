@@ -116,7 +116,7 @@
     }
 
     .terminal {
-      height: 360px;
+      height: 440px;
       overflow-y: auto;
       padding: 20px;
       background: #0d0f13;
@@ -245,7 +245,7 @@
       }
 
       .terminal {
-        height: 320px;
+        height: 380px;
         padding: 15px;
         font-size: 12px;
       }
@@ -299,11 +299,13 @@
 
   <div class="info">
     This runs the original Python code directly in your browser using Pyodide.
-    When the program uses <code>input()</code>, the actual Python question
-    will appear in the input dialog.
+    The program's printed text appears in the terminal first. When it reaches
+    <code>input()</code>, the exact Python question is shown before you are
+    asked for your answer.
     <br><br>
-    Example: if the program asks <code>Where do you want to go? left or right?</code>,
-    you will see that exact question and can type your answer.
+    Example: the introduction appears first, then
+    <code>Where do you want to go? left or right?</code>, and only then you
+    enter your answer.
   </div>
 
 
@@ -471,14 +473,10 @@
        * --------------------------------------------------------
        * TERMINAL OUTPUT
        *
-       * We use a RAW stdout handler instead of a batched handler.
-       * This is important because Python's input() prompt often
-       * does NOT contain a newline:
-       *
-       *     Where do you want to go? 
-       *
-       * With a batched handler that prompt can stay buffered and
-       * never reach our terminal before input() is called.
+       * Python input("...") often writes its question without
+       * a newline. We keep that unfinished text in
+       * pendingInputPrompt so it can be displayed BEFORE we
+       * ask the user for the answer.
        * --------------------------------------------------------
        */
 
@@ -494,25 +492,16 @@
             { stream: true }
           );
 
-          /*
-           * Keep track of the current Python input() prompt.
-           * The prompt is normally the text written immediately
-           * before Python waits for stdin.
-           */
           pendingInputPrompt += text;
 
           /*
-           * If Python printed a newline, this is normal program
-           * output rather than an unfinished input prompt.
+           * If there is a newline, everything before it is
+           * normal printed output. Display it immediately.
            */
           if (pendingInputPrompt.includes("\n")) {
 
             const parts = pendingInputPrompt.split("\n");
 
-            /*
-             * Everything except the final incomplete part is
-             * normal terminal output.
-             */
             for (let i = 0; i < parts.length - 1; i++) {
               writeTerminal(parts[i] + "\n");
             }
@@ -536,14 +525,15 @@
        * --------------------------------------------------------
        * INTERACTIVE INPUT
        *
-       * When Python reaches input(), Pyodide calls this function.
+       * When Python reaches input(), first show the ACTUAL
+       * question in the terminal.
        *
-       * pendingInputPrompt contains the ACTUAL question from
-       * Python, for example:
+       * Example:
        *
-       *     Where do you want to go? 
+       *   You arrive at a path with two directions.
+       *   Where do you want to go? left or right?
        *
-       * We show that exact question to the user.
+       * Then ask for the answer.
        * --------------------------------------------------------
        */
 
@@ -552,33 +542,44 @@
         stdin: function() {
 
           const actualPrompt =
-            pendingInputPrompt.trim() ||
-            "Python is asking for input:";
+            pendingInputPrompt ||
+            "Input required:";
 
           /*
-           * Put the actual Python question into the browser
-           * input dialog.
+           * MOST IMPORTANT LINE:
+           *
+           * Put the Python question into the visible terminal
+           * BEFORE asking for the user's answer.
+           */
+          writeTerminal(actualPrompt, "prompt");
+
+          writeTerminal(" ");
+
+          /*
+           * Show the same actual question in the input dialog.
            */
           const answer = window.prompt(
-            actualPrompt,
+            actualPrompt.trim(),
             ""
           );
 
-          /*
-           * Clear the stored prompt so it cannot appear again.
-           */
           pendingInputPrompt = "";
 
           /*
            * User clicked Cancel.
-           * Returning null means EOF.
            */
           if (answer === null) {
+
+            writeTerminal(
+              "[input cancelled]\n",
+              "error"
+            );
+
             return null;
           }
 
           /*
-           * Show the user's answer in our terminal.
+           * Show the answer in the terminal.
            */
           writeTerminal(answer + "\n");
 
@@ -587,7 +588,7 @@
 
         isatty: true,
 
-        autoEOF: true
+        autoEOF: false
       });
 
 
