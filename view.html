@@ -299,11 +299,11 @@
 
   <div class="info">
     This runs the original Python code directly in your browser using Pyodide.
-    When the program uses <code>input()</code>, you'll be asked for your answer
-    interactively.
+    When the program uses <code>input()</code>, the actual Python question
+    will appear in the input dialog.
     <br><br>
-    Example: if the program asks <code>left or right?</code>, a small input box
-    will appear and you can type your answer.
+    Example: if the program asks <code>Where do you want to go? left or right?</code>,
+    you will see that exact question and can type your answer.
   </div>
 
 
@@ -468,11 +468,57 @@
       });
 
       /*
-       * Send Python print() output to our terminal.
+       * --------------------------------------------------------
+       * TERMINAL OUTPUT
+       *
+       * We use a RAW stdout handler instead of a batched handler.
+       * This is important because Python's input() prompt often
+       * does NOT contain a newline:
+       *
+       *     Where do you want to go? 
+       *
+       * With a batched handler that prompt can stay buffered and
+       * never reach our terminal before input() is called.
+       * --------------------------------------------------------
        */
+
+      let pendingInputPrompt = "";
+
+      const decoder = new TextDecoder();
+
       pyodide.setStdout({
-        batched: (text) => {
-          writeTerminal(text);
+        raw: (byte) => {
+
+          const text = decoder.decode(
+            new Uint8Array([byte]),
+            { stream: true }
+          );
+
+          /*
+           * Keep track of the current Python input() prompt.
+           * The prompt is normally the text written immediately
+           * before Python waits for stdin.
+           */
+          pendingInputPrompt += text;
+
+          /*
+           * If Python printed a newline, this is normal program
+           * output rather than an unfinished input prompt.
+           */
+          if (pendingInputPrompt.includes("\n")) {
+
+            const parts = pendingInputPrompt.split("\n");
+
+            /*
+             * Everything except the final incomplete part is
+             * normal terminal output.
+             */
+            for (let i = 0; i < parts.length - 1; i++) {
+              writeTerminal(parts[i] + "\n");
+            }
+
+            pendingInputPrompt = parts[parts.length - 1];
+          }
         }
       });
 
@@ -488,13 +534,16 @@
 
       /*
        * --------------------------------------------------------
-       * IMPORTANT PART:
+       * INTERACTIVE INPUT
        *
-       * Python input() calls this function.
+       * When Python reaches input(), Pyodide calls this function.
        *
-       * The Python prompt has already been printed to the
-       * terminal, so window.prompt() asks the user for the
-       * actual answer.
+       * pendingInputPrompt contains the ACTUAL question from
+       * Python, for example:
+       *
+       *     Where do you want to go? 
+       *
+       * We show that exact question to the user.
        * --------------------------------------------------------
        */
 
@@ -502,10 +551,23 @@
 
         stdin: function() {
 
+          const actualPrompt =
+            pendingInputPrompt.trim() ||
+            "Python is asking for input:";
+
+          /*
+           * Put the actual Python question into the browser
+           * input dialog.
+           */
           const answer = window.prompt(
-            "Python is asking for input:\n\n" +
-            "Type your answer below:"
+            actualPrompt,
+            ""
           );
+
+          /*
+           * Clear the stored prompt so it cannot appear again.
+           */
+          pendingInputPrompt = "";
 
           /*
            * User clicked Cancel.
@@ -516,7 +578,7 @@
           }
 
           /*
-           * Show the answer in our terminal too.
+           * Show the user's answer in our terminal.
            */
           writeTerminal(answer + "\n");
 
