@@ -122,8 +122,19 @@
       background: #0d0f13;
       color: #e5e1d8;
       font-size: 13px;
-      white-space: pre-wrap;
-      word-break: break-word;
+      font-family: "JetBrains Mono", "Courier New", monospace;
+      line-height: 1.25;
+      white-space: pre;
+      word-break: normal;
+      overflow-x: auto;
+    }
+
+    .terminal-output {
+      display: block;
+      white-space: pre;
+      font-family: inherit;
+      line-height: 1.25;
+      margin: 0;
     }
 
     .terminal .prompt {
@@ -437,15 +448,18 @@
 
   function writeTerminal(text, className = "") {
 
-    const span = document.createElement("span");
+    const output = document.createElement("pre");
+    output.className = "terminal-output";
 
     if (className) {
-      span.className = className;
+      output.classList.add(className);
     }
 
-    span.textContent = text;
+    // Use textContent so ASCII characters and whitespace are never
+    // interpreted as HTML or collapsed by the browser.
+    output.textContent = String(text);
 
-    terminal.appendChild(span);
+    terminal.appendChild(output);
 
     terminal.scrollTop = terminal.scrollHeight;
   }
@@ -574,7 +588,7 @@
             /*
              * Keep the answer visible in the terminal.
              */
-            const answer = document.createElement("span");
+            const answer = document.createElement("pre");
             answer.className = "terminal-answer";
             answer.textContent = value;
 
@@ -705,9 +719,16 @@ async def _terminal_input(prompt=""):
        * The source shown below is still the ORIGINAL source file.
        * Only the browser execution copy is adapted.
        */
+      // Browser-safe input handling:
+      // Convert normal Python input(...) into an awaited terminal input.
+      // The replacement also adds parentheses so expressions such as
+      // input("Guess a letter: ").lower() become:
+      // (await _terminal_input("Guess a letter: ")).lower()
       const executableSource =
-        pythonSource
-          .replace(/\binput\s*\(/g, "_terminal_input(");
+        pythonSource.replace(
+          /\binput\s*\(([^\n]*)\)/g,
+          "(await _terminal_input($1))"
+        );
 
       /*
        * Indent the original program and run it as an async function.
