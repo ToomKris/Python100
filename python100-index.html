@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python100 — 100 Days of Code</title>
+<meta name="description" content="Daily projects from the 100 Days of Code Python bootcamp, by ToomKris.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #14171C;
+    --panel: #1B1F26;
+    --line: #262B33;
+    --text: #E8E6E1;
+    --text-dim: #8B92A0;
+    --accent: #D4A657;
+    --accent-dim: #8A7142;
+    --radius: 3px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Fraunces', Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 5rem 1.5rem 6rem; }
+
+  header.hero { margin-bottom: 3rem; }
+  .hero .back {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    text-decoration: none;
+    margin-bottom: 1.4rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero .back:hover { color: var(--accent); border-bottom-color: var(--accent-dim); }
+
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    font-weight: 500;
+    line-height: 1.15;
+    margin: 0 0 0.9rem;
+    letter-spacing: -0.01em;
+  }
+  .hero p {
+    font-size: 1.02rem;
+    line-height: 1.65;
+    color: var(--text-dim);
+    max-width: 34rem;
+    margin: 0;
+  }
+
+  .progress {
+    margin-top: 1.6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+  .progress .fill-track {
+    height: 4px;
+    background: var(--panel);
+    border-radius: 2px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+  }
+  .progress .fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  #list { border-top: 1px solid var(--line); margin-top: 2.5rem; }
+
+  .day {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    text-decoration: none;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--line);
+    opacity: 0;
+    animation: rise 0.45s ease forwards;
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .day-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    min-width: 3.2rem;
+  }
+
+  .day-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    flex: 1;
+  }
+  .day:hover .day-name { color: var(--accent); }
+
+  .day-arrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  .empty, .error {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    padding: 2rem 0;
+  }
+  .error { color: #C97A6B; }
+
+  .skeleton { padding: 1.1rem 0; border-bottom: 1px solid var(--line); }
+  .skeleton .bar { height: 0.85rem; background: var(--panel); border-radius: var(--radius); width: 45%; }
+
+  footer {
+    margin-top: 3rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+  footer a { text-decoration: underline; text-decoration-color: var(--line); }
+  footer a:hover { color: var(--accent); }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <a class="back" href="https://toomkris.github.io/">← back to portfolio</a>
+    <h1>100 Days of Code — Python</h1>
+    <p>My solutions from Angela Yu's 100 Days of Code bootcamp. One script per day, listed below as they're pushed.</p>
+    <div class="progress">
+      <span id="progress-text">loading…</span>
+      <div class="fill-track"><div class="fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+  </header>
+
+  <div id="list">
+    <div class="skeleton"><div class="bar"></div></div>
+    <div class="skeleton"><div class="bar"></div></div>
+    <div class="skeleton"><div class="bar"></div></div>
+  </div>
+
+  <footer>
+    <a href="https://github.com/ToomKris/Python100" target="_blank" rel="noopener">view repo on GitHub</a>
+  </footer>
+
+</div>
+
+<script>
+  const OWNER = "ToomKris";
+  const REPO = "Python100";
+  const BRANCH = "main";
+
+  // Hand-written titles for filenames that can't be auto-split into words
+  // (no separators between words). New files following the recommended
+  // word_word_dN.py pattern don't need an entry here.
+  const TITLE_OVERRIDES = {
+    "passwordgenerator": "Password Generator",
+    "rockpaperscissors": "Rock Paper Scissors",
+    "treasureisland": "Treasure Island"
+  };
+
+  const listEl = document.getElementById("list");
+  const progressText = document.getElementById("progress-text");
+  const progressFill = document.getElementById("progress-fill");
+
+  function titleFromSlug(slug) {
+    if (TITLE_OVERRIDES[slug]) return TITLE_OVERRIDES[slug];
+    return slug
+      .split("_")
+      .filter(Boolean)
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+  }
+
+  function parseFilename(filename) {
+    const base = filename.replace(/\.py$/i, "");
+    const match = base.match(/^(.+?)_d(\d+)$/i);
+    if (!match) return null;
+    const [, slug, dayStr] = match;
+    return { day: parseInt(dayStr, 10), title: titleFromSlug(slug), filename };
+  }
+
+  async function loadDays() {
+    try {
+      const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/?ref=${BRANCH}`, {
+        headers: { Accept: "application/vnd.github+json" }
+      });
+      if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
+      const items = await res.json();
+
+      const days = items
+        .filter(i => i.type === "file" && i.name.toLowerCase().endsWith(".py"))
+        .map(i => parseFilename(i.name))
+        .filter(Boolean)
+        .sort((a, b) => a.day - b.day);
+
+      render(days);
+    } catch (err) {
+      listEl.innerHTML = `<div class="error">couldn't load the day list from GitHub (${err.message}).</div>`;
+      progressText.textContent = "—";
+    }
+  }
+
+  function render(days) {
+    listEl.innerHTML = "";
+
+    if (days.length === 0) {
+      listEl.innerHTML = `<div class="empty">no day files found yet.</div>`;
+      progressText.textContent = "0 / 100 days";
+      progressFill.style.width = "0%";
+      return;
+    }
+
+    const latest = days[days.length - 1].day;
+    progressText.textContent = `${days.length} of 100 days pushed · latest: day ${latest}`;
+    progressFill.style.width = `${Math.min(latest, 100)}%`;
+
+    days.forEach((d, i) => {
+      const a = document.createElement("a");
+      a.className = "day";
+      a.href = `view.html?file=${encodeURIComponent(d.filename)}&day=${d.day}&title=${encodeURIComponent(d.title)}`;
+      a.style.animationDelay = `${Math.min(i * 40, 400)}ms`;
+      a.innerHTML = `
+        <span class="day-num">day ${d.day}</span>
+        <span class="day-name">${d.title}</span>
+        <span class="day-arrow">→</span>
+      `;
+      listEl.appendChild(a);
+    });
+  }
+
+  loadDays();
+</script>
+
+</body>
+</html>

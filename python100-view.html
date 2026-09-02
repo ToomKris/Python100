@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loading… — Python100</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<style>
+  :root {
+    --bg: #14171C;
+    --panel: #1B1F26;
+    --line: #262B33;
+    --text: #E8E6E1;
+    --text-dim: #8B92A0;
+    --accent: #D4A657;
+    --accent-dim: #8A7142;
+    --radius: 3px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Fraunces', Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+  }
+  .nav a { color: var(--text-dim); text-decoration: none; border-bottom: 1px solid var(--line); }
+  .nav a:hover { color: var(--accent); border-bottom-color: var(--accent-dim); }
+
+  header.hero { margin-bottom: 2.2rem; }
+  .day-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-size: clamp(1.7rem, 4vw, 2.2rem);
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .code-panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .code-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--line);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+  .code-head a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-dim); }
+  .code-head a:hover { border-bottom-color: var(--accent); }
+
+  pre { margin: 0; overflow-x: auto; }
+  pre code.hljs {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    padding: 1.2rem 1.4rem !important;
+    background: transparent !important;
+  }
+
+  .status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    padding: 2rem 0;
+  }
+  .status.error { color: #C97A6B; }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="nav">
+    <a href="index.html">← all days</a>
+    <a href="https://toomkris.github.io/">portfolio</a>
+  </div>
+
+  <header class="hero">
+    <span class="day-label" id="day-label">day —</span>
+    <h1 id="title">Loading…</h1>
+  </header>
+
+  <div class="code-panel">
+    <div class="code-head">
+      <span id="filename">—</span>
+      <a id="github-link" href="#" target="_blank" rel="noopener">view on GitHub →</a>
+    </div>
+    <pre><code id="code" class="language-python">loading…</code></pre>
+  </div>
+
+  <p class="status" id="status" style="display:none;"></p>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<script>
+  const OWNER = "ToomKris";
+  const REPO = "Python100";
+  const BRANCH = "main";
+
+  const params = new URLSearchParams(window.location.search);
+  const file = params.get("file");
+  const day = params.get("day");
+  const title = params.get("title");
+
+  const titleEl = document.getElementById("title");
+  const dayLabelEl = document.getElementById("day-label");
+  const filenameEl = document.getElementById("filename");
+  const githubLinkEl = document.getElementById("github-link");
+  const codeEl = document.getElementById("code");
+  const statusEl = document.getElementById("status");
+
+  if (!file) {
+    statusEl.textContent = "No file specified — go back and pick a day.";
+    statusEl.className = "status error";
+    codeEl.parentElement.parentElement.style.display = "none";
+  } else {
+    if (title) {
+      titleEl.textContent = title;
+      document.title = `${title} — Python100`;
+    }
+    if (day) dayLabelEl.textContent = `day ${day}`;
+    filenameEl.textContent = file;
+    githubLinkEl.href = `https://github.com/${OWNER}/${REPO}/blob/${BRANCH}/${file}`;
+
+    fetch(`https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${file}`)
+      .then(res => {
+        if (!res.ok) throw new Error(`GitHub returned ${res.status}`);
+        return res.text();
+      })
+      .then(text => {
+        codeEl.textContent = text;
+        if (window.hljs) hljs.highlightElement(codeEl);
+      })
+      .catch(err => {
+        statusEl.textContent = `Couldn't load ${file}: ${err.message}`;
+        statusEl.className = "status error";
+        statusEl.style.display = "block";
+      });
+  }
+</script>
+
+</body>
+</html>
